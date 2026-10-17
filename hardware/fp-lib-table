@@ -1,0 +1,5 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "jlcpcb-parts") (type "KiCad") (uri "${KIPRJMOD}/libs/jlcpcb-parts.pretty") (options "") (descr "Footprints converted from JLCPCB parts directory"))
+	(lib (name "kantoniak-kicad") (type "KiCad") (uri "${KIPRJMOD}/libs/kantoniak-kicad.pretty") (options "") (descr ""))
+)

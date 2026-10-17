@@ -1,0 +1,5 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "jlcpcb-parts") (type "KiCad") (uri "${KIPRJMOD}/libs/jlcpcb-parts.kicad_sym") (options "") (descr "Parts converted from JLCPCB parts directory"))
+	(lib (name "kantoniak-kicad") (type "KiCad") (uri "${KIPRJMOD}/libs/kantoniak-kicad.kicad_sym") (options "") (descr ""))
+)
