@@ -92,5 +92,79 @@
 	(property "PROJECT_NAME_UPPERCASE" "INTOXICATING INNOCENCE SAO")
 	(property "PROJECT_REVISION" "1")
 	(property "PROJECT_URL" "https://github.com/kantoniak/intoxicating-innocence-sao")
+	(gr_arc
+		(start 82 100)
+		(mid 100 82)
+		(end 118 100)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "1a00966c-e4cf-4aeb-a0c1-7f8dbd2b5766")
+	)
+	(gr_line
+		(start 82 107.313708)
+		(end 82 100)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "895ad8c0-1a98-44f7-afaa-3ebda2a3a05a")
+	)
+	(gr_line
+		(start 88.686292 114)
+		(end 82 107.313708)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "2909549f-a129-48a3-b18f-0546b8939bec")
+	)
+	(gr_line
+		(start 111.313708 114)
+		(end 88.686292 114)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "8c57d2d3-fb16-458a-b846-a2680969f1eb")
+	)
+	(gr_line
+		(start 118 100)
+		(end 118 107.313708)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "ead3cd93-434e-4455-a599-2dcdadc07b79")
+	)
+	(gr_line
+		(start 118 107.313708)
+		(end 111.313708 114)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(layer "Edge.Cuts")
+		(uuid "fbfffde6-6854-4b22-8358-131de7647bb9")
+	)
+	(point
+		(at 100.00 100.00)
+		(size 1)
+		(layer "F.CrtYd")
+		(uuid "35cf2688-8457-4fa2-bd3d-30e5f6da4962")
+	)
+	(group ""
+		(uuid "95f741b9-5d28-4993-a612-bab209424d81")
+		(members "1a00966c-e4cf-4aeb-a0c1-7f8dbd2b5766" "2909549f-a129-48a3-b18f-0546b8939bec"
+			"895ad8c0-1a98-44f7-afaa-3ebda2a3a05a" "8c57d2d3-fb16-458a-b846-a2680969f1eb"
+			"ead3cd93-434e-4455-a599-2dcdadc07b79" "fbfffde6-6854-4b22-8358-131de7647bb9"
+		)
+	)
 	(embedded_fonts no)
 )

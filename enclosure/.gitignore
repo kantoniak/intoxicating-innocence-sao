@@ -1,0 +1,12 @@
+# Python
+*.pyc
+__pycache__/
+
+# FreeCAD
+*.FCBak
+*.FCStd
+*.FCStd1
+*.FCStd~
+
+# FreeCAD exports
+exports/
