@@ -143,6 +143,10 @@
         [
           "starved_thermal|89875000|99107475|05d1f9b4-5f67-45ee-910c-f3243ad5effe|f471f78e-69c5-476c-94f3-5cfd24f39530|B.Cu",
           "Fixed with manual fill zone"
+        ],
+        [
+          "text_thickness|100000000|88500000|edf7ca7d-c506-45df-a2b1-323603edbc9b|00000000-0000-0000-0000-000000000000",
+          ""
         ]
       ],
       "meta": {
