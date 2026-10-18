@@ -1899,7 +1899,7 @@
 	)
 	(rectangle
 		(start 21.844 21.59)
-		(end 138.43 95.25)
+		(end 138.43 109.22)
 		(stroke
 			(width 0)
 			(type dot)
@@ -2299,6 +2299,26 @@
 			(type default)
 		)
 		(uuid "418508ba-3429-4d22-9af0-5c09f23a9966")
+	)
+	(wire
+		(pts
+			(xy 110.49 92.71) (xy 120.65 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42b6d765-4c09-4853-a532-28f7ea8fe28c")
+	)
+	(wire
+		(pts
+			(xy 110.49 101.6) (xy 120.65 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4669fbdf-b4a0-417d-bb58-175786cf2643")
 	)
 	(wire
 		(pts
@@ -3016,30 +3036,6 @@
 			)
 		)
 	)
-	(global_label "SDA"
-		(shape bidirectional)
-		(at 45.72 72.39 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "3fa88154-7dc4-44d6-b985-f1f8c562b098")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 53.3846 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-	)
 	(global_label "LED_RIGHT"
 		(shape passive)
 		(at 71.12 149.86 180)
@@ -3136,6 +3132,30 @@
 			)
 		)
 	)
+	(global_label "SCL"
+		(shape input)
+		(at 45.72 72.39 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8387081e-c609-467b-acac-a3ddda6fba82")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 52.2128 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "CONFIG_A"
 		(shape passive)
 		(at 71.12 157.48 180)
@@ -3208,6 +3228,30 @@
 			)
 		)
 	)
+	(global_label "SCL"
+		(shape input)
+		(at 120.65 92.71 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "aceaedce-75ff-4323-8842-926201457ec7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 127.1428 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "CONFIG_C"
 		(shape passive)
 		(at 241.3 60.96 180)
@@ -3229,6 +3273,30 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+	)
+	(global_label "SDA"
+		(shape bidirectional)
+		(at 45.72 74.93 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bbcee8b4-70ad-4cc6-8401-df5dff4f327c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 53.3846 74.93 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 	)
@@ -3328,9 +3396,9 @@
 			)
 		)
 	)
-	(global_label "SCL"
-		(shape input)
-		(at 45.72 74.93 0)
+	(global_label "SDA"
+		(shape bidirectional)
+		(at 120.65 101.6 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -3338,9 +3406,9 @@
 			)
 			(justify left)
 		)
-		(uuid "ed28de7a-7a22-4a01-8e3f-1e4f71a052c7")
+		(uuid "e6245bc5-2876-47af-9860-01927f2e142f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 52.2128 74.93 0)
+			(at 128.3146 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3655,6 +3723,83 @@
 			(project "intoxicating-innocence-sao"
 				(path "/559a265e-8809-44d3-9227-9bc29ae1c837"
 					(reference "TP6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 110.49 101.6 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0b224ce6-6b71-42aa-bcf1-11c6f7957dbb")
+		(property "Reference" "TP8"
+			(at 107.188 96.52 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SDA"
+			(at 107.188 99.06 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 110.49 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 110.49 96.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 110.49 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "75719271-92cf-4986-83df-dc53d2f64eb7")
+		)
+		(instances
+			(project "intoxicating-innocence-sao"
+				(path "/559a265e-8809-44d3-9227-9bc29ae1c837"
+					(reference "TP8")
 					(unit 1)
 				)
 			)
@@ -4614,6 +4759,83 @@
 			(project "intoxicating-innocence-sao"
 				(path "/559a265e-8809-44d3-9227-9bc29ae1c837"
 					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 110.49 92.71 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files no)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "605ceb81-4de7-4b52-be89-a5519b6dbc46")
+		(property "Reference" "TP7"
+			(at 107.188 87.63 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SCL"
+			(at 107.188 90.17 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 110.49 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 110.49 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "test point"
+			(at 110.49 92.71 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "961698c8-31ce-40ee-adc8-ee39dcc7c099")
+		)
+		(instances
+			(project "intoxicating-innocence-sao"
+				(path "/559a265e-8809-44d3-9227-9bc29ae1c837"
+					(reference "TP7")
 					(unit 1)
 				)
 			)
