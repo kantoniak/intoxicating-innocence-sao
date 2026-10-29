@@ -127,7 +127,7 @@ def createPcbEnvelope(doc):
     led_shaft.setExpression('AttachmentOffset.Base.y', baseYExpr)
     led_shaft.setExpression('AttachmentOffset.Base.x', baseXExpr)
     led_shaft.setExpression('Radius', '(3 mm + 0.2 mm)/2 + Params.PLA_EXPANSION')
-    led_shaft.setExpression('Height', '5.1 mm + 0.2 mm + Params.PLA_EXPANSION')
+    led_shaft.setExpression('Height', '10 mm + 5.1 mm + 0.2 mm + Params.PLA_EXPANSION')
 
   createLedEnvelope(1, '(3 mm)/2', '-4.35 mm')
   createLedEnvelope(2, '(3 mm)/2', '4.35 mm')
@@ -145,7 +145,28 @@ def createPcbEnvelope(doc):
   return pcb_envelope
 
 
+def createEnvelopeTester(doc):
+  pcb_envelope_tester = doc.addObject("PartDesign::Body", "PCB_Envelope_Tester")
+  xy_plane = pcb_envelope_tester.Origin.OriginFeatures[3]
+
+  pcb_envelope_tester_base_s = pcb_envelope_tester.newObject("Sketcher::SketchObject", f'{pcb_envelope_tester.Label}_Base')
+  pcb_envelope_tester_base_s.AttachmentSupport = xy_plane
+  sketchPcbOutline(pcb_envelope_tester_base_s, '2 mm')
+
+  pcb_envelope_tester_base_pad = pcb_envelope_tester.newObject('PartDesign::Pad', f'{pcb_envelope_tester_base_s.Label}_Pad')
+  pcb_envelope_tester_base_pad.Profile = pcb_envelope_tester_base_s
+  pcb_envelope_tester_base_pad.Type = 'Length'
+  pcb_envelope_tester_base_pad.setExpression('Length', 'Params.PCB_THICKNESS + 9 mm')
+
+  return pcb_envelope_tester
+
 pcb_envelope = createPcbEnvelope(doc)
+pcb_envelope_tester = createEnvelopeTester(doc)
+
+pcb_envelope_tester_cut = doc.addObject("Part::Cut", f'{pcb_envelope_tester.Label}_Cut')
+pcb_envelope_tester_cut.Base = pcb_envelope_tester
+pcb_envelope_tester_cut.Tool = pcb_envelope
+
 
 if IMPORT_STEP:
   print('Importing PCB STEP file...')
