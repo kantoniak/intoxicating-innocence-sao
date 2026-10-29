@@ -6,51 +6,52 @@ import Draft
 import FreeCAD as App
 import MeshPart, Mesh
 
-EXPORT_DXF = True
+IMPORT_STEP = True
+EXPORT_DXF = False
 EXPORT_STL = False
 
 doc = App.newDocument("Enclosure")
 Params = initParams(doc, {
+  'PCB_THICKNESS': '1.6 mm',
+  'PCB_OUTLINE_TOLERANCE': '0.2 mm', # Regular
   'PCB_RADIUS': '18 mm',
   'PCB_BOTTOM_HALF_HEIGHT': '14 mm',
-  'PCB_THICKNESS': '1.6 mm',
+  'PLA_EXPANSION': '0.2 mm',
+  'HEAT_INSERT_HOLE_DIAM': '3.2 mm',
+  'HEAT_INSERT_HOLE_DEPTH': '10 mm',
 })
 doc.RecomputesFrozen = True
 
-def createPcbMockup(doc):
-  pcb_mockup = doc.addObject("PartDesign::Body", "PCB_Mockup")
-  xy_plane = pcb_mockup.Origin.OriginFeatures[3]
 
-  pcb_mockup_base_s = pcb_mockup.newObject("Sketcher::SketchObject", f'{pcb_mockup.Label}_Base')
-  pcb_mockup_base_s.AttachmentSupport = xy_plane
+def sketchPcbOutline(sketch, offsetExpr: str | None = None):
+  radiusExpr = f'Params.PCB_RADIUS + ({offsetExpr})' if offsetExpr else 'Params.PCB_RADIUS'
+  bottomDistExpr = f'Params.PCB_BOTTOM_HALF_HEIGHT + ({offsetExpr})' if offsetExpr else 'Params.PCB_BOTTOM_HALF_HEIGHT'
 
-  (be_r, be_arct, be_arcb, be_l, be_bl, be_b, be_br) = pcb_mockup_base_s.addGeometry([
-        Part.LineSegment(App.Vector(20, -10), App.Vector(20, 0)),
-        Part.Arc(App.Vector(20, 0), App.Vector(0, 20), App.Vector(-20, 0)),
-        Part.Arc(App.Vector(-20, 0), App.Vector(0, -20), App.Vector(20, 0)),
-        Part.LineSegment(App.Vector(-20, 0), App.Vector(-20, -10)),
-        Part.LineSegment(App.Vector(-20, -10), App.Vector(-10, -20)),
-        Part.LineSegment(App.Vector(-10, -20), App.Vector(10, -20)),
-        Part.LineSegment(App.Vector(10, -20), App.Vector(20, -10)),
-      ], False)
+  (be_r, be_arct, be_arcb, be_l, be_bl, be_b, be_br) = sketch.addGeometry([
+    Part.LineSegment(App.Vector(20, -10), App.Vector(20, 0)),
+    Part.Arc(App.Vector(20, 0), App.Vector(0, 20), App.Vector(-20, 0)),
+    Part.Arc(App.Vector(-20, 0), App.Vector(0, -20), App.Vector(20, 0)),
+    Part.LineSegment(App.Vector(-20, 0), App.Vector(-20, -10)),
+    Part.LineSegment(App.Vector(-20, -10), App.Vector(-10, -20)),
+    Part.LineSegment(App.Vector(-10, -20), App.Vector(10, -20)),
+    Part.LineSegment(App.Vector(10, -20), App.Vector(20, -10)),
+  ], False)
 
-  pcb_mockup_base_s.addConstraint([
+  sketch.addConstraint([
     Sketcher.Constraint('Coincident', be_arct, CA.CENTER, *ORIGIN),
     Sketcher.Constraint('PointOnObject', be_arct, CA.START_POINT, AxisId.X),
-    #Sketcher.Constraint('PointOnObject', be_arct, CA.END_POINT, AxisId.X),
-    #Sketcher.Constraint('Coincident', be_arcb, CA.CENTER, be_arct, CA.CENTER),
     Sketcher.Constraint('Coincident', be_arcb, CA.START_POINT, be_arct, CA.END_POINT),
     Sketcher.Constraint('PointOnObject', be_arcb, CA.END_POINT, AxisId.X),
   ])
 
-  pcb_mockup_base_s.toggleConstruction(be_arcb)
-  addExpressionConstraint(pcb_mockup_base_s, 'Radius', 'Params.PCB_RADIUS', be_arct)
-  addExpressionConstraint(pcb_mockup_base_s, 'Radius', 'Params.PCB_RADIUS', be_arcb)
-  addExpressionConstraint(pcb_mockup_base_s, 'Angle', '180', be_arct)
-  addExpressionConstraint(pcb_mockup_base_s, 'Angle', '180', be_arcb)
-  pcb_mockup_base_s.recompute()
+  sketch.toggleConstruction(be_arcb)
+  addExpressionConstraint(sketch, 'Radius', radiusExpr, be_arct)
+  addExpressionConstraint(sketch, 'Radius', radiusExpr, be_arcb)
+  addExpressionConstraint(sketch, 'Angle', '180', be_arct)
+  addExpressionConstraint(sketch, 'Angle', '180', be_arcb)
+  sketch.recompute()
 
-  pcb_mockup_base_s_constraints = pcb_mockup_base_s.addConstraint(constrainCoincidentPath([be_r, be_br, be_b, be_bl, be_l]) + [
+  pcb_mockup_base_s_constraints = sketch.addConstraint(constrainCoincidentPath([be_r, be_br, be_b, be_bl, be_l]) + [
     Sketcher.Constraint('Vertical', be_l),
     Sketcher.Constraint('Vertical', be_r),
     Sketcher.Constraint('Symmetric', be_b, CA.START_POINT, be_b, CA.END_POINT, AxisId.Y),
@@ -61,10 +62,19 @@ def createPcbMockup(doc):
     Sketcher.Constraint('Angle', be_r, CA.START_POINT, be_br, CA.END_POINT, math.radians(135)),
   ])
 
-  pcb_mockup_base_s.setDatum(pcb_mockup_base_s_constraints[-2], App.Units.Quantity('135 deg'))
-  pcb_mockup_base_s.setDatum(pcb_mockup_base_s_constraints[-1], App.Units.Quantity('135 deg'))
-  addExpressionConstraint(pcb_mockup_base_s, 'DistanceY', 'Params.PCB_BOTTOM_HALF_HEIGHT', be_b, CA.START_POINT, *ORIGIN)
-  pcb_mockup_base_s.recompute()
+  sketch.setDatum(pcb_mockup_base_s_constraints[-2], App.Units.Quantity('135 deg'))
+  sketch.setDatum(pcb_mockup_base_s_constraints[-1], App.Units.Quantity('135 deg'))
+  addExpressionConstraint(sketch, 'DistanceY', bottomDistExpr, be_b, CA.START_POINT, *ORIGIN)
+  sketch.recompute()
+
+
+def createPcbMockup(doc):
+  pcb_mockup = doc.addObject("PartDesign::Body", "PCB_Mockup")
+  xy_plane = pcb_mockup.Origin.OriginFeatures[3]
+
+  pcb_mockup_base_s = pcb_mockup.newObject("Sketcher::SketchObject", f'{pcb_mockup.Label}_Base')
+  pcb_mockup_base_s.AttachmentSupport = xy_plane
+  sketchPcbOutline(pcb_mockup_base_s)
 
   pcb_mockup_base_pad = pcb_mockup.newObject('PartDesign::Pad', f'{pcb_mockup_base_s.Label}_Pad')
   pcb_mockup_base_pad.Profile = pcb_mockup_base_s
@@ -73,7 +83,79 @@ def createPcbMockup(doc):
 
   return pcb_mockup
 
-pcb_mockup = createPcbMockup(doc)
+
+def createPcbEnvelope(doc):
+  pcb_envelope = doc.addObject("PartDesign::Body", "PCB_Envelope")
+  xy_plane = pcb_envelope.Origin.OriginFeatures[3]
+
+  pcb_envelope_base_s = pcb_envelope.newObject("Sketcher::SketchObject", f'{pcb_envelope.Label}_Base')
+  pcb_envelope_base_s.AttachmentSupport = xy_plane
+  sketchPcbOutline(pcb_envelope_base_s, 'Params.PCB_OUTLINE_TOLERANCE + Params.PLA_EXPANSION')
+
+  pcb_envelope_base_pad = pcb_envelope.newObject('PartDesign::Pad', f'{pcb_envelope_base_s.Label}_Pad')
+  pcb_envelope_base_pad.Profile = pcb_envelope_base_s
+  pcb_envelope_base_pad.Type = 'Length'
+  pcb_envelope_base_pad.setExpression('Length', 'Params.PCB_THICKNESS + Params.PLA_EXPANSION')
+
+  # SAO pins clearance
+  pcb_envelope_saobox = pcb_envelope.newObject("PartDesign::AdditiveBox", f'{pcb_envelope.Label}_SAOBox')
+  pcb_envelope_saobox.AttachmentSupport = xy_plane
+  pcb_envelope_saobox.MapMode = 'ObjectXY'
+  pcb_envelope_saobox.setExpression('AttachmentOffset.Base.z', 'Params.PCB_THICKNESS')
+  pcb_envelope_saobox.setExpression('Length', '8 mm')
+  pcb_envelope_saobox.setExpression('Width', '5.4 mm')
+  pcb_envelope_saobox.setExpression('Height', '2 mm')
+  pcb_envelope_saobox.setExpression('AttachmentOffset.Base.x', '-Length/2')
+  pcb_envelope_saobox.setExpression('AttachmentOffset.Base.y', '-4.5 mm - (Width/2)')
+
+  # LEDs space
+  def createLedEnvelope(ledNum: int, baseYExpr: str, baseXExpr: str):
+    led_cone = pcb_envelope.newObject("PartDesign::AdditiveCone", f'{pcb_envelope.Label}_LED{ledNum}_Cone')
+    led_cone.AttachmentSupport = xy_plane
+    led_cone.MapMode = 'ObjectXY'
+    led_cone.setExpression('AttachmentOffset.Base.z', 'Params.PCB_THICKNESS')
+    led_cone.setExpression('AttachmentOffset.Base.y', baseYExpr)
+    led_cone.setExpression('AttachmentOffset.Base.x', baseXExpr)
+    led_cone.setExpression('Radius2', '(3.2 mm + 0.2 mm)/2 + Params.PLA_EXPANSION')
+    led_cone.setExpression('Height', '1 mm + 0.2 mm + Params.PLA_EXPANSION')
+    led_cone.setExpression('Radius1', 'Radius2 + Height * sqrt(2)')
+
+    led_shaft = pcb_envelope.newObject("PartDesign::AdditiveCylinder", f'{pcb_envelope.Label}_LED{ledNum}_Shaft')
+    led_shaft.AttachmentSupport = xy_plane
+    led_shaft.MapMode = 'ObjectXY'
+    led_shaft.setExpression('AttachmentOffset.Base.z', 'Params.PCB_THICKNESS')
+    led_shaft.setExpression('AttachmentOffset.Base.y', baseYExpr)
+    led_shaft.setExpression('AttachmentOffset.Base.x', baseXExpr)
+    led_shaft.setExpression('Radius', '(3 mm + 0.2 mm)/2 + Params.PLA_EXPANSION')
+    led_shaft.setExpression('Height', '5.1 mm + 0.2 mm + Params.PLA_EXPANSION')
+
+  createLedEnvelope(1, '(3 mm)/2', '-4.35 mm')
+  createLedEnvelope(2, '(3 mm)/2', '4.35 mm')
+  createLedEnvelope(3, '4.35 mm', '0')
+
+  # Mounting hole space
+  pcb_envelope_heatinserthole = pcb_envelope.newObject("PartDesign::AdditiveCylinder", f'{pcb_envelope.Label}_HeatInsertHole')
+  pcb_envelope_heatinserthole.AttachmentSupport = xy_plane
+  pcb_envelope_heatinserthole.MapMode = 'ObjectXY'
+  pcb_envelope_heatinserthole.setExpression('AttachmentOffset.Base.z', 'Params.PCB_THICKNESS')
+  pcb_envelope_heatinserthole.setExpression('AttachmentOffset.Base.y', '-Params.PCB_BOTTOM_HALF_HEIGHT + 2.4 mm')
+  pcb_envelope_heatinserthole.setExpression('Radius', 'Params.HEAT_INSERT_HOLE_DIAM/2')
+  pcb_envelope_heatinserthole.setExpression('Height', 'Params.HEAT_INSERT_HOLE_DEPTH')
+
+  return pcb_envelope
+
+
+pcb_envelope = createPcbEnvelope(doc)
+
+if IMPORT_STEP:
+  print('Importing PCB STEP file...')
+  pcb_import_shape = Part.read('../hardware/exports/pcb.step')
+  print("> Imported shape type:", pcb_import_shape.ShapeType)
+  print("> Number of solids:", len(pcb_import_shape.Solids))
+  pcb_import = doc.addObject("Part::Feature", "PCB_Import")
+  pcb_import.Shape = pcb_import_shape
+  pcb_import.setExpression('Placement.Base.x', '-100 mm')
+  pcb_import.setExpression('Placement.Base.y', '100 mm')
 
 # Save FreeCAD document
 doc.RecomputesFrozen = False
@@ -114,6 +196,7 @@ def exportDXF(source_obj, path: str):
   doc.removeObject(projection_source.Name)
 
 if EXPORT_DXF:
+  pcb_mockup = createPcbMockup(doc)
   exportDXF(pcb_mockup, "exports/pcb-outline.dxf")
 
 
