@@ -1,10 +1,10 @@
 # Intoxicating Innocence SAO
 
-A blinky [SAO (Simple Add-on/Shitty Add-on)](https://hackaday.io/project/52950-shitty-add-ons/log/159806-introducing-the-shitty-add-on-v169bis-standard) celebrating [Dagoth Ur](https://en.uesp.net/wiki/Lore:Dagoth_Ur), the beloved villain of [The Elder Scrolls 3: Morrowind (2002)](https://en.uesp.net/wiki/Morrowind:Morrowind). Just [listen to that voice](https://www.youtube.com/watch?v=fsXzoQte2kw)!
+A blinky [SAO (Simple Add-on/Shitty Add-on)](https://hackaday.io/project/52950-shitty-add-ons/log/159806-introducing-the-shitty-add-on-v169bis-standard) celebrating [Dagoth Ur](https://en.uesp.net/wiki/Lore:Dagoth_Ur), the beloved villain of [TES 3: Morrowind (2002)](https://en.uesp.net/wiki/Morrowind:Morrowind).
 
 <img src="readme/banner.jpg" alt="Screenshot from Morrowind: Final encounter with Diagoth Ur" />
 
-> What a fool you are. I'm a god. How can you kill a god? What a grand and intoxicating innocence. How could you be so naive? There is no escape. No Recall or Intervention can work in this place. Come. Lay down your weapons. It is not too late for my mercy. — *Dagoth Ur*
+> [[Listen on YouTube](https://www.youtube.com/watch?v=fsXzoQte2kw)]: What a fool you are. I'm a god. How can you kill a god? What a grand and intoxicating innocence. How could you be so naive? There is no escape. No Recall or Intervention can work in this place. Come. Lay down your weapons. It is not too late for my mercy. — *Dagoth Ur*
 
 The project consists of:
 * PCB design (see [hardware/](./hardware/))
