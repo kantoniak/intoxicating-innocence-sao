@@ -8,7 +8,8 @@ import MeshPart, Mesh
 
 IMPORT_STEP = True
 EXPORT_DXF = False
-EXPORT_STL = False
+BUILD_ENVELOPE_TESTER = False
+EXPORT_STL = True
 
 doc = App.newDocument("Enclosure")
 Params = initParams(doc, {
@@ -18,7 +19,7 @@ Params = initParams(doc, {
   'PCB_BOTTOM_HALF_HEIGHT': '14 mm',
   'PLA_EXPANSION': '0.2 mm',
   'HEAT_INSERT_HOLE_DIAM': '3.2 mm',
-  'HEAT_INSERT_HOLE_DEPTH': '10 mm',
+  'HEAT_INSERT_HOLE_DEPTH': '8 mm',
 })
 doc.RecomputesFrozen = True
 
@@ -127,7 +128,7 @@ def createPcbEnvelope(doc):
     led_shaft.setExpression('AttachmentOffset.Base.y', baseYExpr)
     led_shaft.setExpression('AttachmentOffset.Base.x', baseXExpr)
     led_shaft.setExpression('Radius', '(3 mm + 0.2 mm)/2 + Params.PLA_EXPANSION')
-    led_shaft.setExpression('Height', '10 mm + 5.1 mm + 0.2 mm + Params.PLA_EXPANSION')
+    led_shaft.setExpression('Height', '5.1 mm + 1.5 mm + Params.PLA_EXPANSION')
 
   createLedEnvelope(1, '(3 mm)/2', '-4.35 mm')
   createLedEnvelope(2, '(3 mm)/2', '4.35 mm')
@@ -161,12 +162,20 @@ def createEnvelopeTester(doc):
   return pcb_envelope_tester
 
 pcb_envelope = createPcbEnvelope(doc)
-pcb_envelope_tester = createEnvelopeTester(doc)
+stl_export = {
+  'path': 'exports/pcb-envelope.stl',
+  'object': pcb_envelope
+}
 
-pcb_envelope_tester_cut = doc.addObject("Part::Cut", f'{pcb_envelope_tester.Label}_Cut')
-pcb_envelope_tester_cut.Base = pcb_envelope_tester
-pcb_envelope_tester_cut.Tool = pcb_envelope
-
+if BUILD_ENVELOPE_TESTER:
+  pcb_envelope_tester = createEnvelopeTester(doc)
+  pcb_envelope_tester_cut = doc.addObject("Part::Cut", f'{pcb_envelope_tester.Label}_Cut')
+  pcb_envelope_tester_cut.Base = pcb_envelope_tester
+  pcb_envelope_tester_cut.Tool = pcb_envelope
+  stl_export = {
+    'path': 'exports/pcb-envelope-tester.stl',
+    'object': pcb_envelope_tester_cut
+  }
 
 if IMPORT_STEP:
   print('Importing PCB STEP file...')
@@ -240,4 +249,4 @@ def export_to_stl(obj, export_path):
   Mesh.export([mesh_obj], export_path)
 
 if EXPORT_STL:
-  export_to_stl(pcb_mockup, 'exports/enclosure.stl')
+  export_to_stl(stl_export['object'], stl_export['path'])
